@@ -2,15 +2,7 @@
 
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Sheet,
-  SheetTrigger,
-  SheetContent,
-  SheetHeader,
-  SheetDescription,
-  SheetTitle,
-} from "@/components/ui/sheet";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import BandSlider from "@/components/bandSlider/BandSlider";
 
 const Schedule = ({ stages, bands }) => {
