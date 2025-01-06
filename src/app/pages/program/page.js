@@ -6,35 +6,27 @@ export default async function ProgramPage() {
     getSchedule("Midgard"),
     getSchedule("Vanaheim"),
     getSchedule("Jotunheim"),
-    getBands()
+    getBands(),
   ]);
 
   const genreMap = bands.reduce((acc, band) => {
-    acc[band.name] = band.genre;
+    acc[band.name.toLowerCase().trim()] = band.genre; // Brug lowercase og trim
     return acc;
   }, {});
 
   const stages = [
     { name: "Midgard", stageSchedule: mapGenresToSchedule(midgard, genreMap) },
-    {
-      name: "Vanaheim",
-      stageSchedule: mapGenresToSchedule(vanaheim, genreMap)
-    },
-    {
-      name: "Jotunheim",
-      stageSchedule: mapGenresToSchedule(jotunheim, genreMap)
-    }
+    { name: "Vanaheim", stageSchedule: mapGenresToSchedule(vanaheim, genreMap) },
+    { name: "Jotunheim", stageSchedule: mapGenresToSchedule(jotunheim, genreMap) },
   ];
 
   return (
-    <>
-      <div className="flex flex-col items-center justify-center min-h-screen gap-6">
-        <h1 className="text-center text-4xl font-bold font-titan text-white mt-12">
-          Festival program
-        </h1>
-        <Schedule stages={stages} />
-      </div>
-    </>
+    <div className="flex flex-col items-center justify-center min-h-screen gap-6">
+      <h1 className="text-center text-4xl font-bold font-titan text-white mt-12">
+        Festival program
+      </h1>
+      <Schedule stages={stages} bands={bands} />
+    </div>
   );
 }
 
@@ -43,7 +35,7 @@ function mapGenresToSchedule(schedule, genreMap) {
   Object.keys(schedule).forEach((day) => {
     mappedSchedule[day] = schedule[day].map((event) => ({
       ...event,
-      genre: genreMap[event.act] || "Unknown"
+      genre: genreMap[event.act?.toLowerCase().trim()] || "Unknown", // Brug lowercase og trim
     }));
   });
   return mappedSchedule;
