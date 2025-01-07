@@ -24,9 +24,8 @@ const ArtistList = ({ stages = [], bands = [], onlyLiked = false }) => {
     loadLikedBands(); // Hent liked bands fra localStorage
   }, [loadLikedBands]);
 
-  const filteredBands = onlyLiked
-    ? likedBands
-    : bands;
+  // Filtrer bands hvis kun likede bands skal vises
+  const filteredBands = onlyLiked ? likedBands : bands;
 
   const isBandLiked = (slug) =>
     likedBands.some((band) => band.slug === slug);
@@ -62,63 +61,75 @@ const ArtistList = ({ stages = [], bands = [], onlyLiked = false }) => {
   };
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mx-0 md:mx-8">
-      {filteredBands.map((band) => {
-        const imageUrl = getImageUrl(band);
-        const isLiked = isBandLiked(band.slug);
-        const bandSchedule = getBandSchedule(band.name);
+    <>
+      {filteredBands.length === 0 ? (
+        <p className="text-center text-primary text-lg mt-6">
+          {onlyLiked ? "No artists liked yet!" : "No artists found!"}
+        </p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mx-0 md:mx-8">
+          {filteredBands.map((band) => {
+            const imageUrl = getImageUrl(band);
+            const isLiked = isBandLiked(band.slug);
+            const bandSchedule = getBandSchedule(band.name);
 
-        return (
-          <Sheet key={band.slug}>
-            <SheetTrigger asChild>
-              <Card className="hover:scale-105 transition ease-in-out duration-300 hover:border-primary border-2 cursor-pointer rounded-xl">
-                <CardContent className="p-0">
-                  <div className="relative w-full h-40 overflow-hidden rounded-t-xl">
-                    {imageUrl ? (
-                      <Avatar className="absolute inset-0 w-full h-full">
-                        <AvatarImage
-                          src={imageUrl}
-                          alt={band.name}
-                          loading="lazy"
-                          className="object-cover w-full h-full"
-                        />
-                      </Avatar>
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-gray-200 text-gray-600">
-                        No image available
+            return (
+              <Sheet key={band.slug}>
+                <SheetTrigger asChild>
+                  <Card className="hover:scale-105 transition ease-in-out duration-300 hover:border-primary border-2 cursor-pointer rounded-xl">
+                    <CardContent className="p-0">
+                      <div className="relative w-full h-40 overflow-hidden rounded-t-xl">
+                        {imageUrl ? (
+                          <Avatar className="absolute inset-0 w-full h-full">
+                            <AvatarImage
+                              src={imageUrl}
+                              alt={band.name}
+                              loading="lazy"
+                              className="object-cover w-full h-full"
+                            />
+                          </Avatar>
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center bg-gray-200 text-gray-600">
+                            No image available
+                          </div>
+                        )}
+                        {/* Like ikon */}
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleLike(band);
+                          }}
+                          className={`absolute top-2 right-2 w-10 h-10 flex items-center justify-center rounded-full border-2 bg-black ${
+                            isLiked
+                              ? "text-primary border-orange"
+                              : "text-primary border-darkorange hover:border-orange"
+                          } transition duration-200`}
+                        >
+                          {isLiked ? (
+                            <AiFillHeart size={20} />
+                          ) : (
+                            <AiOutlineHeart size={20} />
+                          )}
+                        </button>
                       </div>
-                    )}
-                    {/* Like ikon */}
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleLike(band);
-                      }}
-                      className={`absolute top-2 right-2 w-10 h-10 flex items-center justify-center rounded-full border-2 bg-black ${
-                        isLiked
-                          ? "text-primary border-orange"
-                          : "text-primary border-darkorange hover:border-orange"
-                      } transition duration-200`}
-                    >
-                      {isLiked ? <AiFillHeart size={20} /> : <AiOutlineHeart size={20} />}
-                    </button>
-                  </div>
-                </CardContent>
-                <CardHeader className="py-4">
-                  <CardTitle className="text-center text-2xl font-bold text-white">
-                    {band.name}
-                  </CardTitle>
-                  <CardDescription className="text-center text-primary">
-                    {band.genre || "Unknown Genre"}
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-            </SheetTrigger>
-            <BandSlider band={band} bandSchedule={bandSchedule} />
-          </Sheet>
-        );
-      })}
-    </div>
+                    </CardContent>
+                    <CardHeader className="py-4">
+                      <CardTitle className="text-center text-2xl font-bold text-white">
+                        {band.name}
+                      </CardTitle>
+                      <CardDescription className="text-center text-primary">
+                        {band.genre || "Unknown Genre"}
+                      </CardDescription>
+                    </CardHeader>
+                  </Card>
+                </SheetTrigger>
+                <BandSlider band={band} bandSchedule={bandSchedule} />
+              </Sheet>
+            );
+          })}
+        </div>
+      )}
+    </>
   );
 };
 

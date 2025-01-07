@@ -32,6 +32,7 @@ export default async function LikedBandsPage() {
     { name: "Jotunheim", stageSchedule: mapGenresToSchedule(jotunheim) },
   ];
 
+  
   return (
     <div className="px-10">
     <div className="flex flex-col items-center justify-center my-12">
