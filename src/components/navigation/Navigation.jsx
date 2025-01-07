@@ -132,6 +132,12 @@ const renderLinks = (
       label="Info"
       closeMenu={closeMenu}
     />
+    <NavLink
+      href="/pages/liked"
+      pathname={pathname}
+      label="Liked artist"
+      closeMenu={closeMenu}
+    />
     {isLoggedIn && (
       <NavLink
         href="/pages/login"
