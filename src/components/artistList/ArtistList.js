@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import useLikedBandsStore from "@/stores/likedBandsStore";
 import BandSlider from "@/components/bandSlider/BandSlider";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -16,10 +17,16 @@ function getImageUrl(band) {
     : null;
 }
 
-const ArtistList = ({ stages = [], bands = [] }) => {
-  const likedBands = useLikedBandsStore((state) => state.likedBands);
-  const addBand = useLikedBandsStore((state) => state.addBand);
-  const removeBand = useLikedBandsStore((state) => state.removeBand);
+const ArtistList = ({ stages = [], bands = [], onlyLiked = false }) => {
+  const { likedBands, addBand, removeBand, loadLikedBands } = useLikedBandsStore();
+
+  useEffect(() => {
+    loadLikedBands(); // Hent liked bands fra localStorage
+  }, [loadLikedBands]);
+
+  const filteredBands = onlyLiked
+    ? likedBands
+    : bands;
 
   const isBandLiked = (slug) =>
     likedBands.some((band) => band.slug === slug);
@@ -56,7 +63,7 @@ const ArtistList = ({ stages = [], bands = [] }) => {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mx-0 md:mx-8">
-      {bands.map((band) => {
+      {filteredBands.map((band) => {
         const imageUrl = getImageUrl(band);
         const isLiked = isBandLiked(band.slug);
         const bandSchedule = getBandSchedule(band.name);
