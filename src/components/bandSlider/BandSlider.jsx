@@ -20,13 +20,6 @@ function getFullDayName(shortDay) {
   return days[shortDay] || shortDay; // Hvis dagen ikke findes, returneres det originale input
 }
 
-// function getImageUrl(band) {
-//   const baseUrl = process.env.NEXT_PUBLIC_API_URL || "";
-//   return band.logo?.startsWith("https://")
-//     ? band.logo
-//     : `${baseUrl}/logos/${band.logo}`;
-// }
-
 export default function BandSlider({ band, bandSchedule }) {
   const imageUrl = band?.logo
     ? band.logo.startsWith("https://")
