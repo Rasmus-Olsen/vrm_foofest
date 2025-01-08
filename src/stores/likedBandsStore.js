@@ -22,7 +22,6 @@ const useLikedBandsStore = create((set, get) => ({
   loadLikedBands: () => {
     const savedBands = JSON.parse(localStorage.getItem("likedBands")) || [];
     set({ likedBands: savedBands });
-    
   },
 
   // Get only liked bands
