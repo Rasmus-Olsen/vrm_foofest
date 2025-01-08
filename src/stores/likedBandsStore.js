@@ -24,11 +24,16 @@ const useLikedBandsStore = create((set, get) => ({
     set({ likedBands: savedBands });
   },
 
-  // Get only liked bands
+  // Kun få liked bands
   getLikedBands: () => get().likedBands,
 
-  // Check if a band is liked by its slug
+  // Se om bandet er liket på dens slug
   isBandLiked: (slug) => get().likedBands.some((band) => band.slug === slug),
 }));
 
 export default useLikedBandsStore;
+
+
+
+
+
