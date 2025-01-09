@@ -72,11 +72,11 @@ export default function BandSlider({ band, bandSchedule }) {
         </SheetDescription>
       </SheetHeader>
 
-      <div className="mt-4 space-y-4 overflow-y-auto flex-1">
+      <div className="space-y-4 overflow-y-auto flex-1">
         {/* Band billede */}
         <div className="py-4">
           {imageUrl ? (
-            <Avatar className="w-48 h-48">
+            <Avatar className="w-60 h-60 mx-auto">
               <AvatarImage src={imageUrl} alt={band?.name || "Band"} />
               <AvatarFallback>{band?.name || "?"}</AvatarFallback>
             </Avatar>

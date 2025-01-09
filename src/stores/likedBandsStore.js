@@ -8,7 +8,6 @@ const useLikedBandsStore = create((set, get) => ({
     const updatedBands = [...get().likedBands, band];
     set({ likedBands: updatedBands });
     localStorage.setItem("likedBands", JSON.stringify(updatedBands));
-
   },
 
   // Fjern band fra liked liste
