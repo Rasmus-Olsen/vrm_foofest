@@ -44,29 +44,22 @@ const Schedule = ({ stages, bands }) => {
   };
 
   const handleBandClick = (event, stage, day) => {
-    console.log("Selected event:", event, "Stage:", stage, "Day:", day);
-
-    // Find band fra bands-listen baseret på event.act
     const matchedBand = bands.find(
       (band) =>
         band.name.toLowerCase().trim() === event.act.toLowerCase().trim()
     );
 
     if (matchedBand) {
-      // Kombiner band-data med event-detaljer og tilføj stage og day
       setSelectedBand({
         ...matchedBand,
         schedule: [{ ...event, stage, day }],
       });
-      console.log("Matched Band:", matchedBand);
-    } else {
-      console.error("No band matched for:", event.act);
     }
   };
 
   return (
     <div className="mx-4 lg:mx-24">
-      <div className="gap-6 mt-7 mb-20 ">
+      <div className="gap-6 mt-7 mb-20">
         {/* Stage filter */}
         <div className="flex flex-wrap gap-3 mb-8 justify-center font-oswald">
           {stages.map(({ name }) => (
@@ -158,26 +151,40 @@ const Schedule = ({ stages, bands }) => {
                               onClick={() => handleBandClick(event, name, day)}
                               className={`hover:scale-[1.03] transition ease-in-out duration-300 border rounded-[10px] cursor-pointer ${
                                 event.cancelled
-                                  ? "bg-red-900 border-red-500 text-white"
+                                  ? "bg-primary border-primary text-white"
                                   : "border-darkorange hover:border-primary hover:text-primary"
-                              }`}
+                              } min-h-[85px] flex flex-col justify-between`}
                             >
-                              <CardHeader className="p-2">
-                                <CardTitle className="text-xs font-bold flex justify-between items-center">
-                                  <span>{event.act}</span>
-                                  {event.cancelled && (
-                                    <span className="text-red-500 font-semibold">
-                                      (CANCELED)
+                              <CardHeader className="pt-2 pb-0 px-2">
+                                <CardTitle className="text-xs font-bold flex flex-col items-center">
+                                  <div className="flex justify-between w-full">
+                                    <span>{event.act}</span>
+                                    <span
+                                      className={`${
+                                        event.cancelled
+                                          ? "text-white"
+                                          : "text-gray-500"
+                                      } text-[10px]`}
+                                    >
+                                      {event.start} - {event.end}
                                     </span>
-                                  )}
-                                  <span className="text-gray-500 text-[10px]">
-                                    {event.start} - {event.end}
-                                  </span>
+                                  </div>
                                 </CardTitle>
                               </CardHeader>
-                              <CardContent className="p-2">
+                              {event.cancelled && (
+                                <span className="text-xs text-white font-semibold text-center">
+                                  (Cancelled)
+                                </span>
+                              )}
+                              <CardContent className="pb-2 pt-0 px-2">
                                 {event.genre && (
-                                  <p className="text-gray-400 italic text-[10px]">
+                                  <p
+                                    className={`${
+                                      event.cancelled
+                                        ? "text-white"
+                                        : "text-gray-400"
+                                    } italic text-[10px]`}
+                                  >
                                     {event.genre}
                                   </p>
                                 )}

@@ -51,6 +51,7 @@ const ArtistList = ({ stages = [], bands = [], onlyLiked = false }) => {
                 start: event.start,
                 end: event.end,
                 genre: event.genre || "Unknown",
+                canceled: event.cancelled || false, // Inkluder canceled-status
               });
             }
           });
@@ -73,11 +74,22 @@ const ArtistList = ({ stages = [], bands = [], onlyLiked = false }) => {
             const isLiked = isBandLiked(band.slug);
             const bandSchedule = getBandSchedule(band.name);
 
+            // Kontroller om bandet har aflyste events
+            const isCanceled = bandSchedule.some((slot) => slot.canceled);
+
             return (
               <Sheet key={band.slug}>
                 <SheetTrigger asChild>
-                  <Card className="hover:scale-105 transition ease-in-out duration-300 hover:border-primary border-2 cursor-pointer rounded-xl">
-                    <CardContent className="p-0">
+                  <Card className="hover:scale-105 transition ease-in-out duration-300 border-2 cursor-pointer rounded-xl relative overflow-hidden">
+                    {/* Overlay for aflyste bands */}
+                    {isCanceled && (
+                      <div className="absolute inset-0 bg-primary bg-opacity-90 flex items-center justify-center z-10">
+                        <span className="text-white text-lg font-bold">
+                          Cancelled
+                        </span>
+                      </div>
+                    )}
+                    <CardContent className="p-0 relative">
                       <div className="relative w-full h-40 overflow-hidden rounded-t-xl">
                         {imageUrl ? (
                           <Avatar className="absolute inset-0 w-full h-full">
@@ -99,7 +111,7 @@ const ArtistList = ({ stages = [], bands = [], onlyLiked = false }) => {
                             e.stopPropagation();
                             toggleLike(band);
                           }}
-                          className={`absolute top-2 right-2 w-10 h-10 flex items-center justify-center rounded-full border-2 bg-black ${
+                          className={`absolute top-2 right-2 w-10 h-10 flex items-center justify-center rounded-full border-2 bg-black z-20 ${
                             isLiked
                               ? "text-primary border-orange"
                               : "text-primary border-darkorange hover:border-orange"
