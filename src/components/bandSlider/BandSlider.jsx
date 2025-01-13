@@ -7,6 +7,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import useLikedBandsStore from "@/stores/likedBandsStore";
+import { useState } from "react";
 
 // Funktion til at konvertere korte ugedagsnavne til fulde navne
 function getFullDayName(shortDay) {
@@ -24,6 +25,7 @@ function getFullDayName(shortDay) {
 
 export default function BandSlider({ band, bandSchedule }) {
   const { likedBands, addBand, removeBand } = useLikedBandsStore(); // Zustand hooks
+  const [showFullBio, setShowFullBio] = useState(false); // State for "Read More"
 
   const imageUrl = band?.logo
     ? band.logo.startsWith("https://")
@@ -39,6 +41,12 @@ export default function BandSlider({ band, bandSchedule }) {
   // Funktion til at toggle like
   const toggleLike = () => {
     isBandLiked ? removeBand(band.slug) : addBand(band);
+  };
+
+  // Funktion til at forkorte bio
+  const getShortBio = (bio) => {
+    const maxLength = 150; // Antal tegn i kort version
+    return bio.length > maxLength ? bio.substring(0, maxLength) + "..." : bio;
   };
 
   return (
@@ -87,7 +95,21 @@ export default function BandSlider({ band, bandSchedule }) {
 
         {/* Band beskrivelse */}
         <div className="text-lg my-2">
-          {band?.bio || "Biography not available."}
+          {band?.bio ? (
+            <>
+              {showFullBio ? band.bio : getShortBio(band.bio)}
+              {band.bio.length > 150 && (
+                <button
+                  onClick={() => setShowFullBio((prev) => !prev)}
+                  className="text-primary ml-2 underline"
+                >
+                  {showFullBio ? "Read Less" : "Read More"}
+                </button>
+              )}
+            </>
+          ) : (
+            "Biography not available."
+          )}
         </div>
 
         {/* Genre */}
